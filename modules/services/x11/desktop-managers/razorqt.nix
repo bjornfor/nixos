@@ -23,6 +23,18 @@ in
 
   config = mkIf (xcfg.enable && cfg.enable) {
 
+    environment.etc =
+      [
+        # TODO: We want the WM to be configurable. How?
+        { source = pkgs.writeText "session.conf"
+            ''
+              [General]
+              windowmanager=${pkgs.openbox}/bin/openbox
+            '';
+          target = "xdg/razor/session.conf";
+        }
+      ];
+
     services.xserver.desktopManager.session = singleton
       { name = "razorqt";
         bgSupport = true;
@@ -33,10 +45,6 @@ in
       };
 
     # TODO: figure out what is needed here (and what not)
-    # Seems we need to include at least razor-qt and a window manager
-    # Openbox is the "official" window manager of razor-qt (although many work)
-    # TODO: put the path to openbox in ~/.config/razor/session.conf (or actually,
-    # the corresponding *global* config file).
     environment.systemPackages =
       [ pkgs.hicolor_icon_theme
         pkgs.shared_mime_info
