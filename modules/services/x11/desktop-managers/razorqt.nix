@@ -50,6 +50,11 @@ in
         pkgs.shared_mime_info
         pkgs.razorqt
         pkgs.openbox
+        # Add some xfce apps since Razor-qt includes none
+        pkgs.xfce.mousepad
+        pkgs.xfce.ristretto
+        pkgs.xfce.terminal
+        pkgs.xfce.thunar
       ];
 
     environment.pathsToLink =
