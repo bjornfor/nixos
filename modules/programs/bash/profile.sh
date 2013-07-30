@@ -27,6 +27,10 @@ export NIX_PROFILES="/run/current-system/sw /nix/var/nix/profiles/default $HOME/
 unset PATH INFOPATH PKG_CONFIG_PATH PERL5LIB ALSA_PLUGIN_DIRS GST_PLUGIN_PATH KDEDIRS
 unset QT_PLUGIN_PATH QTWEBKIT_PLUGIN_PATH STRIGI_PLUGIN_PATH XDG_CONFIG_DIRS XDG_DATA_DIRS
 unset MOZ_PLUGIN_PATH TERMINFO_DIRS
+unset PYTHON26PATH
+unset PYTHON27PATH
+unset PYTHON32PATH
+unset PYTHON33PATH
 
 for i in $NIX_PROFILES; do # !!! reverse
     # We have to care not leaving an empty PATH element, because that means '.' to Linux
@@ -56,6 +60,13 @@ for i in $NIX_PROFILES; do # !!! reverse
 
     # Mozilla plugins.
     export MOZ_PLUGIN_PATH=$i/lib/mozilla/plugins${MOZ_PLUGIN_PATH:+:}$MOZ_PLUGIN_PATH
+
+    # The recursivePthLoader in nixpkgs (used by pkgs.pythonFull, not
+    # pkgs.python) picks up extra modules from PYTHON<VERSION>PATH
+    export PYTHON26PATH="$i"/lib/python2.6/site-packages${PYTHON26PATH:+:}$PYTHON26PATH
+    export PYTHON27PATH="$i"/lib/python2.7/site-packages${PYTHON27PATH:+:}$PYTHON27PATH
+    export PYTHON32PATH="$i"/lib/python3.2/site-packages${PYTHON32PATH:+:}$PYTHON32PATH
+    export PYTHON33PATH="$i"/lib/python3.3/site-packages${PYTHON33PATH:+:}$PYTHON33PATH
 done
 
 # Search directory for Aspell dictionaries.
